@@ -53,6 +53,8 @@
     }
   },
   "dependencies": {
+    "node-sass": "^4.10.0",
+    "sass-loader": "^7.1.0",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
@@ -97,6 +99,7 @@
     "require-dir": "^1.1.0",
     "spectron": "^5.0.0",
     "style-loader": "^0.23.1",
+    "tailwindcss": "^0.7.2",
     "ts-loader": "^3.1.1",
     "typescript": "^3.1.6",
     "url-loader": "^1.1.2",

@@ -12,6 +12,4 @@ export default Vue.extend({
 });
 </script>
 
-<style>
-/* CSS */
-</style>
+<style src="./assets/css/tailwind.scss" lang="scss"></style>
