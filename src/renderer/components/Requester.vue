@@ -1,31 +1,47 @@
 <template>
-    <div class="w-4/5 mx-auto">
-        <h1 :class="'font-semibold text-3xl text-' + text_color + '-light mb-3'">{{ title }}</h1>
-        
-        <div class="inline-block relative w-1/5">
-            <select v-model="method" class="appearance-none w-full py-3 px-5 bg-grey-lighter border border-grey-lighter text-grey-darker rounded leading-tight focus:outline-none focus:bg-white focus:border-grey">
-                <option value="GET">GET</option>
-                <option value="POST">POST</option>
-            </select>
-            <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
-                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
-            </div>
+    <div class="w-4/5 mx-auto content-center">
+        <div class="flex flex-row">
+            <h1 :class="'font-semibold text-3xl text-' + text_color + '-light mb-3'">{{ title }}</h1>
         </div>
 
-        <input v-model="url" class="appearance-none border rounded text-grey-dark leading-tight focus:outline-none focus:border-2 focus:border-teal-light w-1/2 py-3 px-5" type="text" placeholder="Enter a URL here"/>
+        <div class="flex flex-row content-center">
+            <div class="inline-block relative w-1/5 m-1">
+                <select v-model="method" class="appearance-none w-full py-3 px-5 bg-grey-lighter border border-grey-lighter text-grey-darker rounded leading-tight focus:outline-none focus:bg-white focus:border-grey">
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                </select>
+                <div class="pointer-events-none absolute pin-y pin-r flex items-center px-2 text-grey-darker">
+                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                </div>
+            </div>
 
-        <button class="w-1/5 bg-blue hover:bg-blue-dark text-white font-bold py-3 px-5 rounded">Send</button>
+            <input v-model="url" class="flex-1 appearance-none border rounded text-grey-dark leading-tight focus:outline-none focus:border-2 focus:border-teal-light w-1/2 py-3 px-5 m-1" type="text" placeholder="Enter a URL here"/>
+
+            <button class="w-1/5 bg-blue hover:bg-blue-dark text-white font-bold py-3 px-5 rounded m-1" @click="send()">Send</button>
+        </div>
+
+        <div class="container bg-white w-full h-50 mt-5 rounded p-5 text-grey-darker">
+            Test
+        </div>
+
+        <div class="flex items-center justify-center content-center">
+            <div v-if="error" class="p-4 mb-4 bg-red-lighter text-center py-4 rounded-full absolute pin-b">
+                <span class="text-red">{{ error }}</span>
+            </div>
+        </div>
     </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import axios from 'axios'
 
 export default class Requester extends Vue{
     name: string = 'Requester'
     title: string = 'New Request'
     method: string = 'GET'
     url: string = ''
+    error: string = ''
     text_colors: Array<string> = ['red', 'blue', 'indigo']
     text_color: string = 'blue'
 
@@ -38,6 +54,17 @@ export default class Requester extends Vue{
         console.log(this.text_colors)
         this.text_color = this.text_colors[Math.floor(Math.random() * this.text_colors.length)]
         console.log(this.text_color)
+    }
+
+    async send () {
+        console.log('Test')
+
+        let response = await axios({
+            method: this.method,
+            url: this.url
+        })
+
+        console.log(response);
     }
 }
 </script>
