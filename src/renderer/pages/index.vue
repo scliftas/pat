@@ -1,17 +1,21 @@
 <template>
-    <div class="bg-purple text-white sm:bg-green md:bg-blue md:text-yellow lg:bg-red xl:bg-orange">
-        <p>{{ HelloWorld }}</p>
+    <div class="p-10 flex content-center">
+        <requester></requester>
     </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import Component from 'vue-class-component'
+import Requester from './../components/Requester.vue'
 
-export default Vue.extend({
-    data () {
-        return {
-            HelloWorld: 'Hello World 3'
-        }
+@Component({
+    components: {
+        Requester
     }
 })
+
+export default class Index extends Vue {
+
+}
 </script>
