@@ -17,11 +17,11 @@
 
             <input v-model="url" class="flex-1 appearance-none border rounded text-grey-dark leading-tight focus:outline-none focus:border-2 focus:border-teal-light w-1/2 py-3 px-5 m-1" type="text" placeholder="Enter a URL here"/>
 
-            <button class="w-1/5 bg-blue hover:bg-blue-dark text-white font-bold py-3 px-5 rounded m-1" @click="send()">Send</button>
+            <button :class="'w-1/5 bg-' + text_color + ' hover:bg-' + text_color + '-dark text-white font-bold py-3 px-5 rounded m-1'" @click="send()">Send</button>
         </div>
 
-        <div class="container bg-white w-full h-50 mt-5 rounded p-5 text-grey-darker">
-            Test
+        <div v-if="response !== ''" class="container bg-white w-full h-50 mt-5 rounded p-5 text-grey-darker">
+            <span v-html="response"></span>
         </div>
 
         <div class="flex items-center justify-center content-center">
@@ -34,7 +34,10 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import Component from 'vue-class-component'
 import axios from 'axios'
+
+@Component({})
 
 export default class Requester extends Vue{
     name: string = 'Requester'
@@ -42,29 +45,21 @@ export default class Requester extends Vue{
     method: string = 'GET'
     url: string = ''
     error: string = ''
+    response: string = ''
     text_colors: Array<string> = ['red', 'blue', 'indigo']
     text_color: string = 'blue'
 
-    created () {
-        console.log('Created')
-    }
-
     mounted () {
-        console.log('Mounted');
-        console.log(this.text_colors)
         this.text_color = this.text_colors[Math.floor(Math.random() * this.text_colors.length)]
-        console.log(this.text_color)
     }
 
     async send () {
-        console.log('Test')
-
         let response = await axios({
             method: this.method,
             url: this.url
         })
 
-        console.log(response);
+        this.response = response.data
     }
 }
 </script>
