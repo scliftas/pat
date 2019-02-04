@@ -20,9 +20,7 @@
             <button :class="'w-1/5 bg-' + text_color + ' hover:bg-' + text_color + '-dark text-white font-bold py-3 px-5 rounded m-1'" @click="send()">Send</button>
         </div>
 
-        <div v-if="response !== ''" class="container bg-white w-full h-50 mt-5 rounded p-5 text-grey-darker">
-            <span v-html="response"></span>
-        </div>
+        <response v-if="response !== ''" :response="response"></response>
 
         <div class="flex items-center justify-center content-center">
             <div v-if="error" class="p-4 mb-4 bg-red-lighter text-center py-4 rounded-full absolute pin-b">
@@ -36,8 +34,13 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import axios from 'axios';
+import Response from './Response.vue';
 
-@Component({})
+@Component({
+    components: {
+        Response
+    }
+})
 
 export default class Requester extends Vue{
     name: string = 'Requester';
