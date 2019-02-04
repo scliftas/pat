@@ -33,42 +33,42 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
-import axios from 'axios'
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import axios from 'axios';
 
 @Component({})
 
 export default class Requester extends Vue{
-    name: string = 'Requester'
-    title: string = 'New Request'
-    method: string = 'GET'
-    url: string = ''
-    error: string = ''
-    response: string = ''
-    text_colors: Array<string> = ['red', 'blue', 'indigo']
-    text_color: string = 'blue'
+    name: string = 'Requester';
+    title: string = 'New Request';
+    method: string = 'GET';
+    url: string = '';
+    error: string = '';
+    response: string = '';
+    text_colors: Array<string> = ['red', 'blue', 'indigo'];
+    text_color: string = 'blue';
 
     mounted () {
-        this.text_color = this.text_colors[Math.floor(Math.random() * this.text_colors.length)]
+        this.text_color = this.text_colors[Math.floor(Math.random() * this.text_colors.length)];
     }
 
     send () {
-        this.reset()
+        this.reset();
 
         axios({
             method: this.method,
             url: this.url
         }).then((response) => {
-            this.response = response.data
+            this.response = response.data;
         }).catch((error) => {
-            this.error = error.response.status
-        })
+            this.error = error.response.status;
+        });
     }
 
     reset () {
-        this.response = ''
-        this.error = ''
+        this.response = '';
+        this.error = '';
     }
 }
 </script>
