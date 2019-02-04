@@ -26,7 +26,7 @@
 
         <div class="flex items-center justify-center content-center">
             <div v-if="error" class="p-4 mb-4 bg-red-lighter text-center py-4 rounded-full absolute pin-b">
-                <span class="text-red">{{ error }}</span>
+                <span class="text-red">Error received with status code {{ error }}</span>
             </div>
         </div>
     </div>
@@ -54,12 +54,17 @@ export default class Requester extends Vue{
     }
 
     async send () {
-        let response = await axios({
+        this.response = ''
+        this.error = ''
+
+        axios({
             method: this.method,
             url: this.url
+        }).then((response) => {
+            this.response = response.data
+        }).catch((error) => {
+            this.error = error.response.status
         })
-
-        this.response = response.data
     }
 }
 </script>
