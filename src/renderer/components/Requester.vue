@@ -20,13 +20,9 @@
             <button :class="'w-1/5 bg-' + text_color + ' hover:bg-' + text_color + '-dark text-white font-bold py-3 px-5 rounded m-1'" @click="send()">Send</button>
         </div>
 
-        <response v-if="response !== ''" :response="response"></response>
+        <response v-if="response" :response="response"></response>
 
-        <div class="flex items-center justify-center content-center">
-            <div v-if="error" class="p-4 mb-4 bg-red-lighter text-center py-4 rounded-full absolute pin-b">
-                <span class="text-red">Error received with status code {{ error }}</span>
-            </div>
-        </div>
+        <error v-if="error_code !== ''" :code="error_code"></error>
     </div>
 </template>
 
@@ -35,10 +31,12 @@ import Vue from 'vue';
 import Component from 'vue-class-component';
 import axios from 'axios';
 import Response from './Response.vue';
+import Error from './Error.vue';
 
 @Component({
     components: {
-        Response
+        Response,
+        Error
     }
 })
 
@@ -47,7 +45,7 @@ export default class Requester extends Vue{
     title: string = 'New Request';
     method: string = 'GET';
     url: string = '';
-    error: string = '';
+    error_code: string = '';
     response: string = '';
     text_colors: Array<string> = ['red', 'blue', 'indigo'];
     text_color: string = 'blue';
@@ -65,13 +63,13 @@ export default class Requester extends Vue{
         }).then((response) => {
             this.response = response.data;
         }).catch((error) => {
-            this.error = error.response.status;
+            this.error_code = error.response.status;
         });
     }
 
     reset () {
         this.response = '';
-        this.error = '';
+        this.error_code = '';
     }
 }
 </script>
