@@ -53,9 +53,8 @@ export default class Requester extends Vue{
         this.text_color = this.text_colors[Math.floor(Math.random() * this.text_colors.length)]
     }
 
-    async send () {
-        this.response = ''
-        this.error = ''
+    send () {
+        this.reset()
 
         axios({
             method: this.method,
@@ -65,6 +64,11 @@ export default class Requester extends Vue{
         }).catch((error) => {
             this.error = error.response.status
         })
+    }
+
+    reset () {
+        this.response = ''
+        this.error = ''
     }
 }
 </script>
