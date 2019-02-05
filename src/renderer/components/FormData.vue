@@ -1,6 +1,6 @@
 <template>
     <div class="flex flex-row content-center mt-3">
-        <div class="container bg-white w-full h-50 rounded p-5 text-grey-darker">
+        <div class="bg-white w-full h-50 rounded p-5 text-grey-darker">
             <table class="table-fixed w-full">
                 <tr class="border-0 border-grey-light border-b border-solid">
                     <th class="p-3">Key</th>
