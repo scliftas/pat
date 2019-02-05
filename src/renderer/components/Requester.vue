@@ -20,6 +20,8 @@
             <button :class="'w-1/5 bg-' + text_color + ' hover:bg-' + text_color + '-dark text-white font-bold py-3 px-5 rounded m-1'" @click="send()">Send</button>
         </div>
 
+        <form-data :form_data="form_data" @form-datum-edited="checkFormData"></form-data>
+
         <response v-if="response" :response="response"></response>
 
         <error v-if="error_code !== ''" :code="error_code"></error>
@@ -30,11 +32,13 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import axios from 'axios';
+import FormData from './FormData.vue';
 import Response from './Response.vue';
 import Error from './Error.vue';
 
 @Component({
     components: {
+        FormData,
         Response,
         Error
     }
@@ -45,6 +49,10 @@ export default class Requester extends Vue{
     title: string = 'New Request';
     method: string = 'GET';
     url: string = '';
+    form_data: Array<Object> = [{
+        key: '',
+        value: ''
+    }];
     error_code: string = '';
     response: string = '';
     text_colors: Array<string> = ['red', 'blue', 'indigo'];
@@ -57,9 +65,16 @@ export default class Requester extends Vue{
     send () {
         this.reset();
 
+        let data = {};
+
+        this.form_data.map((object: any) => {
+            (data as any)[object.key] = object.value;
+        });
+
         axios({
             method: this.method,
-            url: this.url
+            url: this.url,
+            [this.method === 'GET' ? 'params' : 'data']: data
         }).then((response) => {
             this.response = response.data;
         }).catch((error) => {
@@ -70,6 +85,20 @@ export default class Requester extends Vue{
     reset () {
         this.response = '';
         this.error_code = '';
+    }
+
+    checkFormData (event: any) {
+        let keyIsEmpty = event.form_datum.key === '';
+        let valueIsEmpty = event.form_datum.value === '';
+
+        if (keyIsEmpty && valueIsEmpty) return this.form_data.splice(event.index, 1);
+
+        if (keyIsEmpty || valueIsEmpty) return false;
+
+        return this.form_data.push({
+            key: '',
+            value: ''
+        });
     }
 }
 </script>
