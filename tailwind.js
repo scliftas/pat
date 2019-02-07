@@ -482,7 +482,9 @@ module.exports = {
     '16': '4rem',
     '24': '6rem',
     '32': '8rem',
+    '40': '10rem',
     '48': '12rem',
+    '56': '14rem',
     '64': '16rem',
     '1/2': '50%',
     '1/3': '33.33333%',
@@ -658,6 +660,7 @@ module.exports = {
     '20': '5rem',
     '24': '6rem',
     '32': '8rem',
+    '56': '14rem',
   },
 
 
@@ -693,6 +696,7 @@ module.exports = {
     '20': '5rem',
     '24': '6rem',
     '32': '8rem',
+    '56': '14rem',
   },
 
 
@@ -887,8 +891,6 @@ module.exports = {
     minHeight: ['responsive'],
     minWidth: ['responsive'],
     negativeMargin: ['responsive'],
-    objectFit: false,
-    objectPosition: false,
     opacity: ['responsive'],
     outline: ['focus'],
     overflow: ['responsive'],
