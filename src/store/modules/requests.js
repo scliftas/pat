@@ -83,20 +83,24 @@ export const actions = {
         if (state.methods.includes(method)) commit('STORE_METHOD', { method: method });
     },
 
-    checkDatumKey({ commit, state }, data) {
-        commit('STORE_DATUM_KEY', { data: data });
+    checkKey({ commit, state }, data) {
+        let type = getType(data);
 
-        if (datumIsEmpty(state, data.index)) commit('CLEAR_DATUM', { index: data.index });
+        commit(`STORE_${type}_KEY`, { data: data });
 
-        if (datumIsFull(state, data.index)) commit('ADD_EMPTY_DATUM');
+        if (datumIsEmpty(state, data.index)) commit(`CLEAR_${type}`, { index: data.index });
+
+        if (datumIsFull(state, data.index)) commit(`ADD_EMPTY_${type}`);
     },
 
-    checkDatumValue({ commit, state }, data) {
-        commit('STORE_DATUM_VALUE', { data: data });
+    checkValue({ commit, state }, data) {
+        let type = getType(data);
 
-        if (datumIsEmpty(state, data.index)) commit('CLEAR_DATUM', { index: data.index });
+        commit(`STORE_${type}_VALUE`, { data: data });
 
-        if (datumIsFull(state, data.index)) commit('ADD_EMPTY_DATUM');
+        if (datumIsEmpty(state, data.index)) commit(`CLEAR_${type}`, { index: data.index });
+
+        if (datumIsFull(state, data.index)) commit(`ADD_EMPTY_${type}`);
     },
 
     makeRequest ({ commit, state }) {
@@ -121,6 +125,22 @@ export const actions = {
             commit('STORE_ERROR', { error: error });
         });
     }
+}
+
+export const getType = (data) => {
+    let type = 'DATUM';
+
+    switch (data.type) {
+        case 'data':
+        default:
+            type = 'DATUM';
+            break;
+        case 'headers':
+            type = 'HEADER';
+            break;
+    }
+    
+    return type;
 }
 
 export const datumIsEmpty = (state, index) => {
