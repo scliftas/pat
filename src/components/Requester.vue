@@ -6,7 +6,7 @@
 
         <div class="flex flex-row content-center">
             <div class="inline-block relative w-1/5 m-1">
-                <select v-model="method" class="appearance-none w-full py-3 px-5 bg-grey-lighter border border-grey-lighter text-grey-darker rounded leading-tight focus:outline-none focus:bg-white focus:border-grey">
+                <select :value="request.method" @change="updateMethod" class="appearance-none w-full py-3 px-5 bg-grey-lighter border border-grey-lighter text-grey-darker rounded leading-tight focus:outline-none focus:bg-white focus:border-grey">
                     <option value="GET">GET</option>
                     <option value="POST">POST</option>
                 </select>
@@ -15,24 +15,24 @@
                 </div>
             </div>
 
-            <input v-model="url" class="flex-1 appearance-none border rounded text-grey-dark leading-tight focus:outline-none focus:border-2 focus:border-teal-light w-1/2 py-3 px-5 m-1" type="text" placeholder="Enter a URL here"/>
+            <input @value="request.url" @change="updateURL" class="flex-1 appearance-none border rounded text-grey-dark leading-tight focus:outline-none focus:border-2 focus:border-teal-light w-1/2 py-3 px-5 m-1" type="text" placeholder="Enter a URL here"/>
 
             <button :class="'w-1/5 bg-' + text_color + ' hover:bg-' + text_color + '-dark text-white font-bold py-3 px-5 rounded m-1'" @click="send()">Send</button>
         </div>
 
-        <form-data :formData="form_data" @form-datum-edited="checkFormData"></form-data>
+        <form-data></form-data>
 
-        <response v-if="response" :response="response"></response>
+        <response></response>
 
-        <error v-if="error_code !== ''" :code="error_code"></error>
+        <error></error>
     </div>
 </template>
 
 <script>
-import axios from 'axios';
 import FormData from './FormData';
 import Response from './Response';
 import Error from './Error';
+import { mapGetters } from 'vuex';
 
 export default {
 
@@ -42,17 +42,14 @@ export default {
     Error,
   },
 
+  computed: mapGetters({
+    methods: 'requests/methods',
+    request: 'requests/request'
+  }),
+
   data: () => ({
     name: 'Requester',
     title: 'Requester',
-    method: 'GET',
-    url: '',
-    form_data: [{
-      key: '',
-      value: '',
-    }],
-    error_code: '',
-    response: '',
     text_colors: ['red', 'blue', 'indigo'],
     text_color: 'blue',
   }),
@@ -62,30 +59,16 @@ export default {
   },
 
   methods: {
-    send() {
-      this.reset();
-
-      const data = {};
-
-      this.form_data.map((object) => {
-        data[object.key] = object.value;
-        return object;
-      });
-
-      axios({
-        method: this.method,
-        url: this.url,
-        [this.method === 'GET' ? 'params' : 'data']: data,
-      }).then((response) => {
-        this.response = response.data;
-      }).catch((error) => {
-        this.error_code = error.response.status;
-      });
+    updateMethod(e) {
+      this.$store.dispatch('requests/storeMethod', e.target.value);
     },
 
-    reset() {
-      this.response = '';
-      this.error_code = '';
+    updateURL(e) {
+      this.$store.dispatch('requests/storeURL', e.target.value);
+    },
+
+    send() {
+      this.$store.dispatch('requests/makeRequest');
     },
 
     checkFormData(event) {

@@ -6,9 +6,9 @@
                     <th class="p-3">Key</th>
                     <th class="p-3">Value</th>
                 </tr>
-                <tr v-for="(formDatum, index) in formData" :key="index" class="border-0 border-grey-light border-b border-solid">
-                    <td class="border-0 border-grey-light border-r border-solid"><input type="text" class="w-full h-100 p-3 appearance-none border border-white leading-tight focus:border focus:outline-none focus:border-2 focus:border-teal-light" v-model="formDatum.key" placeholder="New Key" @change="checkRows(formDatum, index)"></td>
-                    <td><input type="text" class="w-full h-100 p-3 appearance-none border border-white leading-tight focus:border focus:outline-none focus:border-2 focus:border-teal-light" v-model="formDatum.value" placeholder="Value" @change="checkRows(formDatum, index)"></td>
+                <tr v-for="(formDatum, index) in request.data" :key="index" class="border-0 border-grey-light border-b border-solid">
+                    <td class="border-0 border-grey-light border-r border-solid"><input type="text" class="w-full h-100 p-3 appearance-none border border-white leading-tight focus:border focus:outline-none focus:border-2 focus:border-teal-light" :value="formDatum.key" placeholder="New Key" @change="storeDatumKey($event, index)"></td>
+                    <td><input type="text" class="w-full h-100 p-3 appearance-none border border-white leading-tight focus:border focus:outline-none focus:border-2 focus:border-teal-light" :value="formDatum.value" @change="storeDatumValue($event, index)" placeholder="Value"></td>
                 </tr>
             </table>
         </div>
@@ -16,18 +16,27 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
-  props: {
-    formData: Array,
-  },
+  computed: mapGetters({
+    request: 'requests/request'
+  }),
 
   methods: {
-    checkRows(formDatum, index) {
-      this.$emit('form-datum-edited', {
-        formDatum,
-        index,
+    storeDatumKey(e, index) {
+      this.$store.dispatch('requests/checkDatumKey', {
+        index: index,
+        value: e.target.value
       });
     },
+
+    storeDatumValue(e, index) {
+      this.$store.dispatch('requests/checkDatumValue', {
+        index: index,
+        value: e.target.value
+      });
+    }
   },
 };
 </script>
