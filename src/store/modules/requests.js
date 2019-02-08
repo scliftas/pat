@@ -103,16 +103,12 @@ export const actions = {
         commit('CLEAR_RESPONSE');
         commit('CLEAR_ERROR');
 
-        const data = {};
-        let request = JSON.parse(JSON.stringify(state.request));
-
-        request.data.map((object) => {
-            if (object.key === null || object.key === '') return object;
-            data[object.key] = object.value;
-            return object;
-        });
-
-        request.data = data;
+        const request = JSON.parse(JSON.stringify(state.request));
+        request.data = Object.assign(...request.data.filter((object) => {
+            return object.key !== '';
+        }).map((object) => {
+            return { [object.key]: object.value }
+        }));
 
         if (request.method === 'GET') {
             request.params = request.data;
