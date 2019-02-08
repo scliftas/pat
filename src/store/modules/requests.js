@@ -132,5 +132,9 @@ export const datumIsEmpty = (state, index) => {
 }
 
 export const datumIsFull = (state, index) => {
-    return state.request.data[index].key !== '' && state.request.data[index].value !== '';
+    const dataLength = state.request.data.length - 1;
+    const indexIsFull = state.request.data[index].key !== '' && state.request.data[index].value !== '';
+    const dataIsFull = state.request.data[dataLength].key !== '' && state.request.data[dataLength].value !== '';
+
+    return indexIsFull && dataIsFull;
 }
