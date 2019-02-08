@@ -70,22 +70,6 @@ export default {
     send() {
       this.$store.dispatch('requests/makeRequest');
     },
-
-    checkFormData(event) {
-      const keyIsEmpty = event.formDatum.key === '';
-      const valueIsEmpty = event.formDatum.value === '';
-
-      if (keyIsEmpty && valueIsEmpty) return this.form_data.splice(event.index, 1);
-
-      console.log('Test');
-
-      if (keyIsEmpty || valueIsEmpty) return false;
-
-      return this.form_data.push({
-        key: '',
-        value: '',
-      });
-    },
   },
 };
 </script>
