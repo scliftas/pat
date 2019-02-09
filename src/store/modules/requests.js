@@ -17,7 +17,9 @@ export const state = {
               key: '',
               value: ''
           }
-      ]
+      ],
+      crossDomain: true,
+      withCredentials: true
   },
   response: false,
   error: false
@@ -133,6 +135,9 @@ export const actions = {
         commit('CLEAR_ERROR');
 
         const request = JSON.parse(JSON.stringify(state.request));
+
+        if (request.url === '') return commit('STORE_ERROR', { error: 'URL is required!' });
+
         request.data = transformArrayInput(request.data);
         request.headers = transformArrayInput(request.headers);
 
