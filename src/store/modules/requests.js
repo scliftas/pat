@@ -11,6 +11,12 @@ export const state = {
             key: '',
             value: ''
           }
+      ],
+      headers: [
+          {
+              key: '',
+              value: ''
+          }
       ]
   },
   response: false,
@@ -42,12 +48,31 @@ export const mutations = {
         state.request.data[data.index].value = data.value;
     },
 
+    STORE_HEADER_KEY(state, { data }) {
+        state.request.headers[data.index].key = data.value;
+    },
+
+    STORE_HEADER_VALUE(state, { data }) {
+        state.request.headers[data.index].value = data.value;
+    },
+
     CLEAR_DATUM (state, { index }) {
         state.request.data.splice(index, 1);
     },
 
+    CLEAR_HEADER (state, { index }) {
+        state.request.headers.splice(index, 1);
+    },
+
     ADD_EMPTY_DATUM (state) {
         state.request.data.push({
+            key: '',
+            value: ''
+        });
+    },
+
+    ADD_EMPTY_HEADER (state) {
+        state.request.headers.push({
             key: '',
             value: ''
         });
@@ -88,9 +113,9 @@ export const actions = {
 
         commit(`STORE_${type}_KEY`, { data: data });
 
-        if (datumIsEmpty(state, data.index)) commit(`CLEAR_${type}`, { index: data.index });
+        if (datumIsEmpty(state, data.type, data.index)) commit(`CLEAR_${type}`, { index: data.index });
 
-        if (datumIsFull(state, data.index)) commit(`ADD_EMPTY_${type}`);
+        if (datumIsFull(state, data.type, data.index)) commit(`ADD_EMPTY_${type}`);
     },
 
     checkValue({ commit, state }, data) {
@@ -98,9 +123,9 @@ export const actions = {
 
         commit(`STORE_${type}_VALUE`, { data: data });
 
-        if (datumIsEmpty(state, data.index)) commit(`CLEAR_${type}`, { index: data.index });
+        if (datumIsEmpty(state, data.type, data.index)) commit(`CLEAR_${type}`, { index: data.index });
 
-        if (datumIsFull(state, data.index)) commit(`ADD_EMPTY_${type}`);
+        if (datumIsFull(state, data.type, data.index)) commit(`ADD_EMPTY_${type}`);
     },
 
     makeRequest ({ commit, state }) {
@@ -108,7 +133,8 @@ export const actions = {
         commit('CLEAR_ERROR');
 
         const request = JSON.parse(JSON.stringify(state.request));
-        request.data = request.data.reduce((acc, { key, value }) => key === '' ? acc : {...acc, [key]: value}, {});
+        request.data = transformArrayInput(request.data);
+        request.headers = transformArrayInput(request.headers);
 
         if (request.method === 'GET') {
             request.params = request.data;
@@ -139,14 +165,21 @@ export const getType = (data) => {
     return type;
 }
 
-export const datumIsEmpty = (state, index) => {
-    return state.request.data[index].key === '' && state.request.data[index].value === '' && state.request.data.length > 1;
+export const datumIsEmpty = (state, type, index) => {
+    const requestProperty = state.request[type];
+
+    return requestProperty[index].key === '' && requestProperty[index].value === '' && requestProperty.length > 1;
 }
 
-export const datumIsFull = (state, index) => {
-    const dataLength = state.request.data.length - 1;
-    const indexIsFull = state.request.data[index].key !== '' && state.request.data[index].value !== '';
-    const dataIsFull = state.request.data[dataLength].key !== '' && state.request.data[dataLength].value !== '';
+export const datumIsFull = (state, type, index) => {
+    const requestProperty = state.request[type];
+    const dataLength = requestProperty.length - 1;
+    const indexIsFull = requestProperty[index].key !== '' && requestProperty[index].value !== '';
+    const dataIsFull = requestProperty[dataLength].key !== '' && requestProperty[dataLength].value !== '';
 
     return indexIsFull && dataIsFull;
+}
+
+export const transformArrayInput = (arr) => {
+    return arr.reduce((acc, { key, value }) => key === '' ? acc : {...acc, [key]: value}, {});
 }

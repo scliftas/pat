@@ -20,7 +20,7 @@
             <button :class="'w-1/5 bg-' + text_color + ' hover:bg-' + text_color + '-dark text-white font-bold py-3 px-5 rounded m-1'" @click="send()">Send</button>
         </div>
 
-        <configurator-table type="data"></configurator-table>
+        <configurator></configurator>
 
         <response></response>
 
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import ConfiguratorTable from './ConfiguratorTable';
+import Configurator from './Configurator';
 import Response from './Response';
 import Error from './Error';
 import { mapGetters } from 'vuex';
@@ -37,7 +37,7 @@ import { mapGetters } from 'vuex';
 export default {
 
   components: {
-    ConfiguratorTable,
+    Configurator,
     Response,
     Error,
   },
