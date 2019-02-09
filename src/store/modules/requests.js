@@ -108,11 +108,7 @@ export const actions = {
         commit('CLEAR_ERROR');
 
         const request = JSON.parse(JSON.stringify(state.request));
-        request.data = Object.assign(...request.data.filter((object) => {
-            return object.key !== '';
-        }).map((object) => {
-            return { [object.key]: object.value }
-        }));
+        request.data = request.data.reduce((acc, { key, value }) => key === '' ? acc : {...acc, [key]: value}, {});
 
         if (request.method === 'GET') {
             request.params = request.data;
