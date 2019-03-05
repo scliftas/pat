@@ -1,4 +1,4 @@
-import axios from 'axios';
+const fork = require('child_process').fork;
 
 // state
 export const state = {
@@ -146,10 +146,12 @@ export const actions = {
             delete request.data;
         }
 
-        axios(request).then((response) => {
+        let requester = fork('src/store/modules/requester.js');
+        requester.send(request);
+        
+        requester.on('message', (response) => {
+            console.log('Response', response);
             commit('STORE_RESPONSE', { response: response })
-        }).catch((error) => {
-            commit('STORE_ERROR', { error: error });
         });
     }
 }
